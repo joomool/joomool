@@ -7,73 +7,54 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <style>
         :root { --point-color: #39FF14; --bg-color: #ffffff; --text-main: #111111; --text-sub: #666666; --card-bg: #f9f9f9; }
-        body { margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+        body { margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
         
-        /* 헤더 및 메뉴 정렬 */
-        header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid #eee; }
-        .logo { font-size: 1.5rem; font-weight: 900; text-decoration: none; color: inherit; }
+        /* 헤더 설정 */
+        header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid #eee; }
+        .logo { font-size: 1.5rem; font-weight: 900; text-decoration: none; color: inherit; z-index: 1100; }
         
-        nav { display: flex; align-items: center; gap: 25px; }
+        /* 네비게이션 wrapper (기본 PC 스타일) */
+        .nav-wrapper { display: flex; align-items: center; gap: 25px; }
         .nav-item { position: relative; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
         .nav-item a { text-decoration: none; color: var(--text-main); transition: 0.3s; }
         .nav-item a:hover { color: var(--point-color); }
 
         /* CHARACTER 드롭다운 스타일 */
         .dropdown {
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            min-width: 100px;
-            padding: 10px 0;<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOOMOOL's Arttoy</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-    <style>
-        :root { --point-color: #39FF14; --bg-color: #ffffff; --text-main: #111111; --text-sub: #666666; --card-bg: #f9f9f9; }
-        body { margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
-        
-        /* 헤더 및 메뉴 정렬 */
-        header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid #eee; }
-        .logo { font-size: 1.5rem; font-weight: 900; text-decoration: none; color: inherit; }
-        
-        nav { display: flex; align-items: center; gap: 25px; }
-        .nav-item { position: relative; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
-        .nav-item a { text-decoration: none; color: var(--text-main); transition: 0.3s; }
-        .nav-item a:hover { color: var(--point-color); }
-
-        /* CHARACTER 드롭다운 스타일 */
-        .dropdown {
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            min-width: 100px;
-            padding: 10px 0;
-            display: none; /* 평소에는 숨김 */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            background: #fff; border: 1px solid #eee; border-radius: 8px;
+            min-width: 100px; padding: 10px 0; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        .dropdown a {
-            display: block;
-            padding: 8px 20px;
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-        .nav-item:hover .dropdown { display: block; } /* 마우스 올리면 나타남 */
+        .dropdown a { display: block; padding: 8px 20px; font-size: 0.85rem; white-space: nowrap; }
+        .nav-item:hover .dropdown { display: block; }
 
-        /* 인스타그램 아이콘 */
         .insta-icon { width: 18px; height: 18px; vertical-align: middle; }
 
-        /* 기존 그리드 스타일 유지 */
+        /* 햄버거 버튼 (기본 숨김) */
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1100; }
+        .menu-toggle span { width: 25px; height: 3px; background: #000; transition: 0.3s; }
+
+        /* --- 모바일 대응 (768px 이하) --- */
+        @media (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            
+            .nav-wrapper {
+                position: fixed; top: 0; right: -100%; /* 오른쪽 밖으로 숨김 */
+                width: 70%; height: 100vh; background: #fff;
+                flex-direction: column; justify-content: center; align-items: center;
+                gap: 30px; transition: 0.4s ease-in-out; 
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-wrapper.active { right: 0; } /* 클릭 시 나타남 */
+
+            /* 모바일에서는 드롭다운을 그냥 밑에 바로 보이게 처리 */
+            .dropdown { position: static; transform: none; display: block; box-shadow: none; border: none; text-align: center; padding: 0; }
+            .dropdown a { padding: 5px 0; color: var(--text-sub) !important; font-size: 0.9rem; }
+            .nav-item { text-align: center; font-size: 1.1rem; }
+        }
+
+        /* 기존 디자인 섹션 */
         .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .hero h1 { font-size: 3rem; font-weight: 800; }
         .hero h1 span { background-color: var(--point-color); padding: 0 10px; }
@@ -94,7 +75,14 @@
 <body>
     <header>
         <a href="index.html" class="logo">JOOMOOL</a>
-        <nav>
+        
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav class="nav-wrapper" id="nav-content">
             <div class="nav-item">
                 <a href="#">CHARACTER</a>
                 <div class="dropdown">
@@ -151,101 +139,19 @@
         </div>
     </div>
     <footer>&copy; 2025 JOOMOOL. All rights reserved.</footer>
+
+    <script>
+        const menuToggle = document.getElementById('mobile-menu');
+        const navContent = document.getElementById('nav-content');
+
+        menuToggle.addEventListener('click', () => {
+            navContent.classList.toggle('active');
+        });
+
+        // 메뉴 클릭 시 자동으로 닫기
+        navContent.addEventListener('click', () => {
+            navContent.classList.remove('active');
+        });
+    </script>
 </body>
 </html>
-            display: none; /* 평소에는 숨김 */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .dropdown a {
-            display: block;
-            padding: 8px 20px;
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-        .nav-item:hover .dropdown { display: block; } /* 마우스 올리면 나타남 */
-
-        /* 인스타그램 아이콘 */
-        .insta-icon { width: 18px; height: 18px; vertical-align: middle; }
-
-        /* 기존 그리드 스타일 유지 */
-        .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hero h1 { font-size: 3rem; font-weight: 800; }
-        .hero h1 span { background-color: var(--point-color); padding: 0 10px; }
-        .container { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
-        .section-title { font-size: 1.5rem; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
-        .section-title::before { content: ""; width: 30px; height: 4px; background-color: var(--point-color); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .item { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid #eee; text-decoration: none; color: inherit; transition: 0.3s; display: block; }
-        .item:hover { transform: translateY(-10px); }
-        .item img { width: 100%; height: auto; display: block; }
-        .item-info { padding: 20px; }
-        .btn-view { display: inline-block; padding: 8px 18px; background-color: var(--text-main); color: #fff; border-radius: 50px; font-size: 0.8rem; font-weight: 600; transition: 0.3s; }
-        .item:hover .btn-view { background-color: var(--point-color); color: #000; }
-
-        footer { text-align: center; padding: 40px; color: #bbb; font-size: 0.8rem; }
-    </style>
-</head>
-<body>
-    <header>
-        <a href="index.html" class="logo">JOOMOOL</a>
-        <nav>
-            <div class="nav-item">
-                <a href="#">CHARACTER</a>
-                <div class="dropdown">
-                    <a href="char_ippari.html">ippari</a>
-                    <a href="char_angma.html">angma</a>
-                </div>
-            </div>
-            <div class="nav-item"><a href="about.html">ABOUT</a></div>
-            <div class="nav-item"><a href="contact.html">CONTACT</a></div>
-            <div class="nav-item"><a href="index.html#portfolio">PORTFOLIO</a></div>
-            <div class="nav-item">
-                <a href="https://instagram.com/joomool_joo" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram" class="insta-icon">
-                </a>
-            </div>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <h1>JOOMOOL <span>Universe</span></h1>
-        <p>주물주물 작은 세계</p>
-    </section>
-
-    <div class="container" id="portfolio">
-        <h2 class="section-title">Latest Works</h2>
-        <div class="grid">
-            <a href="ippari_black.html" class="item">
-                <img src="ippari001.png" alt="이빠리 Black">
-                <div class="item-info">
-                    <h3>이빠리 Black & Red</h3>
-                    <p>Resin, acrylic | 2025</p>
-                    <p>₩ 000,000</p>
-                    <span class="btn-view">구경하기</span>
-                </div>
-            </a>
-            <a href="ippari_purple.html" class="item">
-                <img src="ippari002_01.png" alt="이빠리 Purple">
-                <div class="item-info">
-                    <h3>이빠리 Purple & Gold</h3>
-                    <p>Resin, acrylic | 2025</p>
-                    <p>₩ 000,000</p>
-                    <span class="btn-view">구경하기</span>
-                </div>
-            </a>
-            <a href="angma_red.html" class="item" id="shop">
-                <img src="angma_005.png" alt="앙마 Red">
-                <div class="item-info">
-                    <h3>앙마 Red</h3>
-                    <p>Resin, acrylic | 2025</p>
-                    <p>₩ 000,000</p>
-                    <span class="btn-view">구경하기</span>
-                </div>
-            </a>
-        </div>
-    </div>
-    <footer>&copy; 2025 JOOMOOL. All rights reserved.</footer>
-</body>
-
-</html>
-
